@@ -1,0 +1,358 @@
+/* TODO: split all this into structural vs. style */
+@import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
+
+:solarize {
+    /* Solarize */
+    /*  background  |         content         | background */
+    /*              | <- darker    lighter -> |            */
+    /* base03 base02 base01 base00 base0 base1 base2 base3 */
+                 /* theme:  dark                | light              */
+    --base03:  #002b36;  /* background          |                    */
+    --base02:  #073642;  /* bg highlight        |                    */
+    --base01:  #586e75;  /* secondary content   | emphasized content */
+    --base00:  #657b83;  /*                     | primary content    */
+    --base0:   #839496;  /* primary content     |                    */
+    --base1:   #93a1a1;  /* emphasized content  | secondary content  */
+    --base2:   #eee8d5;  /*                     | bg highlight       */
+    --base3:   #fdf6e3;  /*                     | background         */
+                 /* highlights: */
+    --yellow:  #b58900;
+    --orange:  #cb4b16;
+    --red:     #dc322f;
+    --magenta: #d33682;
+    --violet:  #6c71c4;
+    --blue:    #268bd2;
+    --cyan:    #2aa198;
+    --green:   #859900;
+
+    --gray32:  #323232;
+}
+
+:root {
+    --bgcolor:  #fbfbfb;
+    --bgcolor2: #ddd;
+    --fgcolor:  #666;
+    --fgcolor2:  #444;
+    --headertext: #777;
+    --link: #3399f3;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100&;
+}
+
+
+html, body {
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--fgcolor);
+    background-color: var(--bgcolor);
+    font-size: 14px;
+}
+
+a {
+    color: var(--link);
+}
+
+/*
+  #markdown
+      #header
+      #content
+          #toc
+          #main
+*/
+
+#markdown {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+/****  Header  ****/
+
+#header {
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
+}
+
+#header {
+    background-color: #eee;
+    background-image: linear-gradient(#fff,#eee 50%,#e4e4e4);
+    background-repeat: no-repeat;
+    color: var(--headertext);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.3);
+    font-size: 14px;
+}
+
+#header h1 {
+    font-size: 1.3em;
+    font-weight: 400;
+    margin: 0 2em 0 1em;
+}
+
+#header a {
+    padding: .75rem;
+    color: var(--headertext);
+    text-decoration: none;
+}
+
+#header hr {
+    width: 1px;
+    height: 1em;
+    background: var(--headertext);
+    border: 0;
+    margin: 0 1em;
+}
+
+#header > ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#header > ul > li {
+    display: block;
+    padding: .75rem;
+    position: relative;  /* causes submenus to draw immediately below*/
+    text-decoration: none;
+}
+
+/* drop-down arrow */
+#header > ul > li:not(:empty)::after {
+    content: "\25bc";
+    font-size: .75em;
+
+}
+
+#header > ul li:focus-within a {
+    outline: none;
+    cursor: pointer;
+}
+
+#header > ul li ul {
+    background: var(--bgcolor);
+    border: 1px solid rgba(0,0,0,0.15);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+    border-bottom-right-radius: 4px;
+    border-bottom-left-radius: 4px;
+    padding: 0;
+
+    visibility: hidden;
+    opacity: 0;
+    display: none;
+    min-width: 5rem;
+    position: absolute;  /* causes submenus to draw immediately below*/
+    margin-top: .75rem; 
+    left: 0;
+}
+
+#header li > hr {
+    border: 0;
+    height: 1px;
+    width: 100%;  /*calc(100% - 2em);*/
+    background: var(--fgcolor);
+    margin: .5em 0;
+}
+
+#header > ul li:hover > ul,
+/*#header > ul li:focus-within > ul,*/
+#header > ul li ul:hover,
+#header > ul li ul:focus {
+  visibility: visible;
+  opacity: 1;
+  display: block
+}
+
+#header > ul li ul li {
+    list-style: none;
+    white-space: nowrap;
+}
+
+#header > ul li ul li {
+    font-weight: normal;
+}
+
+/** I want: "#header > ul li ul li, that doesn't contain an a"  */
+
+#header > ul li ul li a {
+    color: var(--fgcolor);
+    display: block; 
+    text-decoration: none;
+    padding: .5em 2em .5em 1.5em;
+}
+
+#header > ul li ul li a:hover,
+#header > ul li ul li a:focus {
+    background-color: var(--fgcolor);
+    color: var(--bgcolor);
+}
+
+/****    ****/
+
+
+#content {
+    max-width: calc(100% - 10em);
+    margin: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+}
+
+toc {
+    min-width: 25%;
+}
+
+toc:empty {
+    display: none;
+}
+
+toc ul {
+    margin-right: 2em;
+    padding: 0;
+}
+
+toc li:first-child {
+    border-top-right-radius: .5em;
+    border-top-left-radius: .5em;
+}
+
+toc li:last-child {
+    border-bottom-right-radius: .5em;
+    border-bottom-left-radius: .5em;
+}
+
+toc li {
+    border: 1px solid #ddd;
+    list-style: none;
+}
+
+toc li a {
+    color: var(--fgcolor);
+    display: block; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    padding: .5em 2em .5em 1.5em;
+/*    font-size: .9em;*/
+}
+
+toc li:first-child a:hover {
+    border-top-right-radius: .5em;
+    border-top-left-radius: .5em;
+}
+
+toc li:last-child a:hover {
+    border-bottom-right-radius: .5em;
+    border-bottom-left-radius: .5em;
+}
+
+toc li a:hover,
+toc li a:focus {
+    background-color: var(--fgcolor);
+    color: var(--bgcolor);
+}
+
+main {
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--fgcolor2);
+}
+h1 {  font-size: 2.058em;  }  /* phi^1.5 */ 
+h2 {  font-size: 1.618em;  }  /* phi */
+h3 {  font-size: 1.272em;  }  /* phi^.5 */
+h4 {  font-size: 1em;  }     
+h5 {  font-size: .786em;  }
+h6 {  font-size: .618em;  }
+
+textarea {
+    resize: none;
+}
+textarea {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-size: 12px;
+}
+
+code {
+/*   white-space: nowrap;*/
+}
+code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 4px;
+}
+
+pre {
+    display: block;
+/*
+    word-break: break-all;
+    word-wrap: break-word;
+*/
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.428571429;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: scroll;
+}
+pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+/*    white-space: pre-wrap;*/
+    background-color: transparent;
+    border: 0;
+}
+code, pre {
+    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+table {
+    width: 95%;
+    border: 1px solid var(--fgcolor);
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin-bottom: 1.5em;
+}
+th {
+    background-color: var(--fgcolor);
+    color: var(--bgcolor);
+    font-style:italic;
+}
+th, td {
+    padding: .3em;
+    line-height: 1.428571429;
+    vertical-align: top;
+    border: 1px solid var(--fgcolor);
+}
+main p {
+    margin: .2em 0;
+}
+main hr {
+    border: 0;
+    height: 1px;
+    width: calc(100% - 2em);
+    background: #888;
+    margin: 1em auto;
+
+}
+.anchor {
+    margin-left: .25em;
+    opacity: 0;
+}
+.anchor:hover {
+    opacity: 1;
+}
+
+img, video, canvas {
+    max-width: 100%;
+}
