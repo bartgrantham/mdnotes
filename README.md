@@ -104,6 +104,7 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
 
 ### Bugs
 
+- relative path bug, exposed in github pages version
 - unhover header menus after click
     - this turns out to be harder than it looks
     - elements can be accessed with something like this `document.querySelector("#header ul li ul:hover")`, but Javascript can't directly remove the `:hover` pseudo class
