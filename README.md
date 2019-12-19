@@ -2,6 +2,8 @@
 
 **Client-rendered static website from markdown**
 
+See the [example from this repo](https://bartgrantham.github.io/mdnotes/)
+
 
 - - - -
 
