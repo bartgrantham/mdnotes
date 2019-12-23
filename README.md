@@ -106,11 +106,11 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
     - `:empty` seemed promising, but if an element contains text (even with no other nodes) it isn't considered empty
     - I want a `:not(:has(*))`, but `:has()` is still experimental
 - header non-anchors look terrible
-    - anchors within nav/toc can hover-highlight the entire width because they are margin:0, but if I any margin or padding to the containing li to fix the non-anchors, the anchors will be white-padded
+    - anchors within header/toc can hover-highlight the entire width because they are margin:0, but if I add any margin or padding to the containing li to fix the non-anchors, the anchors will be white-padded
     - I want a `:not(:has(*))` for these li's as well
-- header (and nav?) multi-level navigation
+- header (and toc?) multi-level navigation
 - headers don't degrade gracefully when we run out of space (in fact, they go haywire)
-- nav scroll follows main scroll (including scrolling itself!)
+- nav scroll should follow main scroll (including scrolling itself!)
 - calculation of anchor scroll target coordinate has a magic value (1.5), should be more exact
 
 ### Probably won't fix
