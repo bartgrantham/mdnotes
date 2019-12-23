@@ -170,7 +170,6 @@ a {
     list-style: none;
     white-space: nowrap;
     font-weight: normal;
-    color: red;
 }
 
 /** I want: "#header > ul li ul li, that doesn't contain an a"  */
