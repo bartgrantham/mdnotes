@@ -78,7 +78,9 @@ a {
     display: flex;
     flex-direction: column;
 }
-/****  Header  ****/
+
+
+/****  Header: navigation links rendered from navigation.md ****/
 
 #header {
     display: flex;
@@ -177,10 +179,8 @@ a {
 #header > ul li ul li {
     list-style: none;
     white-space: nowrap;
-}
-
-#header > ul li ul li {
     font-weight: normal;
+    color: red;
 }
 
 /** I want: "#header > ul li ul li, that doesn't contain an a"  */
@@ -198,8 +198,8 @@ a {
     color: var(--bgcolor);
 }
 
-/****    ****/
 
+/****  Content: Table-of-Contents left sidebar + rendered markdown  ****/
 
 #content {
     max-width: calc(100% - 10em);
@@ -209,6 +209,8 @@ a {
     flex-direction: row;
 }
 
+
+/****  Table-of-Contents  ****/
 toc {
     min-width: 25%;
 }
@@ -222,19 +224,21 @@ toc ul {
     padding: 0;
 }
 
-toc li:first-child {
+toc li {
+    border: 1px solid #ddd;
+    list-style: none;
+}
+
+toc li:first-child,
+toc li:first-child a:hover {
     border-top-right-radius: .5em;
     border-top-left-radius: .5em;
 }
 
-toc li:last-child {
+toc li:last-child,
+toc li:last-child a:hover {
     border-bottom-right-radius: .5em;
     border-bottom-left-radius: .5em;
-}
-
-toc li {
-    border: 1px solid #ddd;
-    list-style: none;
 }
 
 toc li a {
@@ -245,17 +249,6 @@ toc li a {
     text-overflow: ellipsis;
     text-decoration: none;
     padding: .5em 2em .5em 1.5em;
-/*    font-size: .9em;*/
-}
-
-toc li:first-child a:hover {
-    border-top-right-radius: .5em;
-    border-top-left-radius: .5em;
-}
-
-toc li:last-child a:hover {
-    border-bottom-right-radius: .5em;
-    border-bottom-left-radius: .5em;
 }
 
 toc li a:hover,
@@ -263,6 +256,9 @@ toc li a:focus {
     background-color: var(--fgcolor);
     color: var(--bgcolor);
 }
+
+
+/****  Rendered markdown content  ****/
 
 main {
     scroll-behavior: smooth;
@@ -281,16 +277,16 @@ h5 {  font-size: .786em;  }
 h6 {  font-size: .618em;  }
 
 textarea {
-    resize: none;
-}
-textarea {
     font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
     font-size: 12px;
+    resize: none;
 }
 
-code {
-/*   white-space: nowrap;*/
+code, pre {
+    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
 }
+
+/* `backticks` get rendered as <code></code> */
 code {
     padding: 2px 4px;
     font-size: 90%;
@@ -299,6 +295,7 @@ code {
     border-radius: 4px;
 }
 
+/* ``` triple backticks ``` get rendered as <pre><code></code></pre> */
 pre {
     display: block;
 /*
@@ -319,13 +316,11 @@ pre code {
     padding: 0;
     font-size: inherit;
     color: inherit;
-/*    white-space: pre-wrap;*/
     background-color: transparent;
     border: 0;
 }
-code, pre {
-    font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
-}
+
+
 table {
     width: 95%;
     border: 1px solid var(--fgcolor);
@@ -344,6 +339,7 @@ th, td {
     vertical-align: top;
     border: 1px solid var(--fgcolor);
 }
+
 main p {
     margin: .2em 0;
 }
@@ -355,6 +351,7 @@ main hr {
     margin: 1em auto;
 
 }
+/* .anchor == paragraph symbol rendered next to H2's in #main */
 .anchor {
     margin-left: .25em;
     opacity: 0;
@@ -366,6 +363,32 @@ main hr {
 img, video, canvas {
     max-width: 100%;
 }
+
+/**** "alert" keyword system ****/
+/* .alert provides a border with some whitespace */
+.alert {
+    margin: 1em 0;
+    padding: 1em;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+/* .alert-$COLOR sets the color of the border and background */
+.alert-blue {
+    color: #3a87ad;
+    background-color: #d9edf7; 
+    border-color: #bce8f1;
+}
+.alert-green {
+    color: #468847;
+    background-color: #dff0d8; 
+    border-color: #d6e9c6;
+}
+.alert-yellow {
+    color: #c09853;
+    background-color: #fcf8e3; 
+    border-color: #fbeed5;
+}
+
 
 </style><style>
 /* PrismJS 1.16.0
@@ -1995,6 +2018,17 @@ var Markdown = (spec)=>{
     const md_link = /(!?)\[([^\]]*)\]\(((\\.|.)*?)\)/g;  // ![alt](src+title), possibly with back-slash escaped parens
     const md_link_srctitle = /^\s*(.*?)\s*"(.*)"\s*$/;    // foo bar/src.jpg "title"
     const asciimath_exp = /\$(.*?)\$/g;
+    const whitespace = /\s+/g;
+    const alerts = {}
+    for(const word of ["warning", "achtung", "attention", "warnung", "atención", "guarda", "advertimiento", "attenzione"]){
+        alerts[word] = "yellow"
+    }
+    for(const word of ["note", "beachte", "nota"]){
+        alerts[word] = "blue"
+    }
+    for(const word of ["hint", "tip", "tipp", "hinweis", "suggerimento"]){
+        alerts[word] = "green"
+    }
 
     let raw_md = "", error_msg = "";
 
@@ -2128,6 +2162,20 @@ var Markdown = (spec)=>{
         for(let i=0; i<codes.length; i++) {
             codes[i].innerHTML = codecache[i];
         }
+
+        // look for "alert" words in the first word of each paragraph
+        for(let el of document.getElementsByTagName('P')) {
+            let first = el.innerText.trim().split(whitespace)[0];
+            if ( first[first.length-1] != ":" ) {
+                continue
+            }
+            first = first.slice(0, -1).toLowerCase()
+            if (alerts[first] != undefined) {
+                el.classList.add('alert')
+                el.classList.add(`alert-${alerts[first]}`)
+            }
+        }
+
     }
 
     // scroll the main content section to the named anchor

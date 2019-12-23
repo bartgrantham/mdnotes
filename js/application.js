@@ -102,6 +102,17 @@ var Markdown = (spec)=>{
     const md_link = /(!?)\[([^\]]*)\]\(((\\.|.)*?)\)/g;  // ![alt](src+title), possibly with back-slash escaped parens
     const md_link_srctitle = /^\s*(.*?)\s*"(.*)"\s*$/;    // foo bar/src.jpg "title"
     const asciimath_exp = /\$(.*?)\$/g;
+    const whitespace = /\s+/g;
+    const alerts = {}
+    for(const word of ["warning", "achtung", "attention", "warnung", "atención", "guarda", "advertimiento", "attenzione"]){
+        alerts[word] = "yellow"
+    }
+    for(const word of ["note", "beachte", "nota"]){
+        alerts[word] = "blue"
+    }
+    for(const word of ["hint", "tip", "tipp", "hinweis", "suggerimento"]){
+        alerts[word] = "green"
+    }
 
     let raw_md = "", error_msg = "";
 
@@ -235,6 +246,20 @@ var Markdown = (spec)=>{
         for(let i=0; i<codes.length; i++) {
             codes[i].innerHTML = codecache[i];
         }
+
+        // look for "alert" words in the first word of each paragraph
+        for(let el of document.getElementsByTagName('P')) {
+            let first = el.innerText.trim().split(whitespace)[0];
+            if ( first[first.length-1] != ":" ) {
+                continue
+            }
+            first = first.slice(0, -1).toLowerCase()
+            if (alerts[first] != undefined) {
+                el.classList.add('alert')
+                el.classList.add(`alert-${alerts[first]}`)
+            }
+        }
+
     }
 
     // scroll the main content section to the named anchor

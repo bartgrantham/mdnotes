@@ -87,12 +87,45 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
 
 ### Features
 
-- better css organization
+- make css color system more modular
 - modal lightbox for linked images/video/audio?
-- should I call out "note"/"warning"/"caution" sections like mdwiki?
 - might be helpful to turn off certain features
-- are there other rendering operators that would be helpful than `#!some_text.md`?  (`#^some_diagram.ditaa`?)
+    - asciimath, inline scripts, "alert" keywords
+- are there rendering operators that would be helpful other than `#!some_text.md`?  (ie. `#^some_diagram.ditaa`?)
 - hidpi HTML canvas (if I ever get around to diagram rendering)
+- more comprehensive test page(s)
+
+### Bugs
+
+- unhover header menus after click
+    - this turns out to be harder than it looks
+    - elements can be accessed with something like `document.querySelector("#header ul li ul:hover")`, but Javascript can't remove the `:hover` pseudo class
+    - dispatching mousemove, mouseout, and blur events on the stack of ":hover" elements doesn't seem to work, either
+    - temporarily setting `pointer-events` to `none` on all elements in `document.querySelectorAll(':hover')` also didn't work
+- headers with no sublist shouldn't have pulldown arrows
+    - `:empty` seemed promising, but if an element contains text (even with no other nodes) it isn't considered empty
+    - I want a `:not(:has(*))`, but `:has()` is still experimental
+- header non-anchors look terrible
+    - anchors within nav/toc can hover-highlight the entire width because they are margin:0, but if I any margin or padding to the containing li to fix the non-anchors, the anchors will be white-padded
+    - I want a `:not(:has(*))` for these li's as well
+- header (and nav?) multi-level navigation
+- headers don't degrade gracefully when we run out of space (in fact, they go haywire)
+- nav scroll follows main scroll (including scrolling itself!)
+- calculation of anchor scroll target coordinate has a magic value (1.5), should be more exact
+
+### Probably won't fix
+
+- Path bug with absolute paths to "raw" pages in github pages version of this repo
+    - Not exactly a bug.  This is a side-effect of github putting the repo's web content under a relative URL, but the link to the raw content being absolute.  This isn't generally an issue, only because I'm trying to have it both ways with this repo vs. the github pages version.
+    - But this does raise an ambiguity with this system: what if a user wants to link a raw file in a relative URL ending in '.md'?
+- Tertiary numbered lists are interpreted as code blocks
+    - This is a common markdown problem, not solvable without deviating from Commonmark (and hacking marked)
+- Make all md-originating script tags `defer` so inserting them doesn't block our rendering thread
+    - This isn't possible for inline scripts because they have no src attribute (ie. `defer` has no effect on them)
+    - One solution is to wrap the code in an event handler and fire the event after adding the elements (fragile)
+    - Another is encode the script content as base64 and put it in the src attribute (`src="data:text/javascript;base64,...`), _this is madness_
+- ASCIIMath.js grabs a single dollar sign on a line by itself (ie. "thousands of $")
+    - Annoying, but not solvable without hacking ASCIIMath
 - mdwiki marked hacks I probably don't need
     - removing excess `<p></p>` and `<br />` tags
     - moving images to the beginning of divs to float them
@@ -100,26 +133,7 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
     - cluster images in the same paragraph for lightboxing together
     - footer
     - themes (I'd rather just make the css simple and easy to swap)
-- more tests
 
-### Bugs
-
-- relative path bug, exposed in github pages version
-- unhover header menus after click
-    - this turns out to be harder than it looks
-    - elements can be accessed with something like this `document.querySelector("#header ul li ul:hover")`, but Javascript can't directly remove the `:hover` pseudo class
-- tertiary lists are interpreted as code blocks
-    - this is a common markdown problem, not sure if solvable
-- lists don't auto-advance
-- headers with no sublist shouldn't have pulldown arrows
-- header non-anchors look terrible
-- header (and nav?) multi-level navigation
-- headers don't degrade gracefully when we run out of space (in fact, they go haywire)
-- nav scroll follows main scroll (including scrolling itself!)
-- calculation of anchor scroll target coordinate has a magic value, should be more exact
-- make all md-originating script tags async
-- is tokens/parser a cleaner way to handle script tags?
-- ASCIIMath.js grabs a single dollar sign on a line by itself (ie. "thousands of $")
 
 
 - - - -
