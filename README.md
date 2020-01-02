@@ -88,6 +88,8 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
 ### Features
 
 - make css color system more modular
+    - refactor and split into structural vs. style
+    - possibly adopt the [base16](https://github.com/chriskempson/base16) color system
 - modal lightbox for linked images/video/audio?
 - might be helpful to turn off certain features
     - asciimath, inline scripts, "alert" keywords
@@ -97,6 +99,7 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
 
 ### Bugs
 
+- image (other media, too?) with a relative path doesn't get translated properly.  Ie. `foo/bar.md` contains a link to `quux.png`, the link is `/quux.png` when it should be `foo/quux.png`
 - unhover header menus after click
     - this turns out to be harder than it looks
     - elements can be accessed with something like `document.querySelector("#header ul li ul:hover")`, but Javascript can't remove the `:hover` pseudo class
