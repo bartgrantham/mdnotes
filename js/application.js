@@ -196,6 +196,7 @@ var Markdown = (spec)=>{
         }
 
         // do the markdown conversion
+        document.title = "mdnotes"  // default title, overwritten by first h1
         let mainhtml = marked(md, { renderer: renderer, smartLists: true });
 
         // unmask ASCIIMath expressions now that they can be safely translated (after insertion to the DOM)
