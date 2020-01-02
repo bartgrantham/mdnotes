@@ -1,21 +1,14 @@
 /* TODO: split all this into structural vs. style */
 @import url('https://fonts.googleapis.com/css?family=Open+Sans&display=swap');
 
-:solarize {
-    /* Solarize */
-    /*  background  |         content         | background */
-    /*              | <- darker    lighter -> |            */
-    /* base03 base02 base01 base00 base0 base1 base2 base3 */
-                 /* theme:  dark                | light              */
-    --base03:  #002b36;  /* background          |                    */
-    --base02:  #073642;  /* bg highlight        |                    */
-    --base01:  #586e75;  /* secondary content   | emphasized content */
-    --base00:  #657b83;  /*                     | primary content    */
-    --base0:   #839496;  /* primary content     |                    */
-    --base1:   #93a1a1;  /* emphasized content  | secondary content  */
-    --base2:   #eee8d5;  /*                     | bg highlight       */
-    --base3:   #fdf6e3;  /*                     | background         */
-                 /* highlights: */
+:root {
+    --bgcolor1: #fbfbfb;
+    --bgcolor2: #eee;
+    --bgcolor3: #ddd;
+    --fgcolor1: #777;
+    --fgcolor2:  #666;
+    --fgcolor3:  #444;
+
     --yellow:  #b58900;
     --orange:  #cb4b16;
     --red:     #dc322f;
@@ -24,17 +17,6 @@
     --blue:    #268bd2;
     --cyan:    #2aa198;
     --green:   #859900;
-
-    --gray32:  #323232;
-}
-
-:root {
-    --bgcolor:  #fbfbfb;
-    --bgcolor2: #ddd;
-    --fgcolor:  #666;
-    --fgcolor2:  #444;
-    --headertext: #777;
-    --link: #3399f3;
 }
 
 html, body {
@@ -46,21 +28,28 @@ html, body {
 
 html, body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: var(--fgcolor);
-    background-color: var(--bgcolor);
+    color: var(--fgcolor2);
+    background-color: var(--bgcolor1);
     font-size: 14px;
 }
 
 a {
-    color: var(--link);
+    color: var(--blue);
 }
 
 /*
-  #markdown
-      #header
-      #content
-          #toc
-          #main
+  /========  #markdown  ========\
+  | /--------- #header -------\ |
+  | \-------------------------/ |
+  |                             |
+  | /-------- #content -------\ |
+  | |                         | |
+  | | / #toc \ /--- #main --\ | |
+  | | |      | |            | | |
+  | | \------/ \------------/ | |
+  | |                         | |
+  | \-------------------------/ |
+  \=============================/
 */
 
 #markdown {
@@ -79,10 +68,10 @@ a {
 }
 
 #header {
-    background-color: #eee;
-    background-image: linear-gradient(#fff,#eee 50%,#e4e4e4);
+    background-color: var(--bgcolor2);
+    background-image: linear-gradient(var(--bgcolor1),var(--bgcolor2) 50%, var(--bgcolor3));
     background-repeat: no-repeat;
-    color: var(--headertext);
+    color: var(--fgcolor1);
     text-shadow: 0 1px 0 rgba(255,255,255,0.3);
     font-size: 14px;
 }
@@ -95,14 +84,14 @@ a {
 
 #header a {
     padding: .75rem;
-    color: var(--headertext);
+    color: var(--fgcolor1);
     text-decoration: none;
 }
 
 #header hr {
     width: 1px;
     height: 1em;
-    background: var(--headertext);
+    background: var(--fgcolor1);
     border: 0;
     margin: 0 1em;
 }
@@ -133,7 +122,7 @@ a {
 }
 
 #header > ul li ul {
-    background: var(--bgcolor);
+    background: var(--bgcolor1);
     border: 1px solid rgba(0,0,0,0.15);
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     border-bottom-right-radius: 4px;
@@ -153,7 +142,7 @@ a {
     border: 0;
     height: 1px;
     width: 100%;  /*calc(100% - 2em);*/
-    background: var(--fgcolor);
+    background: var(--fgcolor2);
     margin: .5em 0;
 }
 
@@ -175,7 +164,7 @@ a {
 /** I want: "#header > ul li ul li, that doesn't contain an a"  */
 
 #header > ul li ul li a {
-    color: var(--fgcolor);
+    color: var(--fgcolor2);
     display: block; 
     text-decoration: none;
     padding: .5em 2em .5em 1.5em;
@@ -183,8 +172,8 @@ a {
 
 #header > ul li ul li a:hover,
 #header > ul li ul li a:focus {
-    background-color: var(--fgcolor);
-    color: var(--bgcolor);
+    background-color: var(--fgcolor2);
+    color: var(--bgcolor1);
 }
 
 
@@ -231,7 +220,7 @@ toc li:last-child a:hover {
 }
 
 toc li a {
-    color: var(--fgcolor);
+    color: var(--fgcolor2);
     display: block; 
     white-space: nowrap;
     overflow: hidden;
@@ -242,8 +231,8 @@ toc li a {
 
 toc li a:hover,
 toc li a:focus {
-    background-color: var(--fgcolor);
-    color: var(--bgcolor);
+    background-color: var(--fgcolor2);
+    color: var(--bgcolor1);
 }
 
 
@@ -256,7 +245,7 @@ main {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: var(--fgcolor2);
+    color: var(--fgcolor3);
 }
 h1 {  font-size: 2.058em;  }  /* phi^1.5 */ 
 h2 {  font-size: 1.618em;  }  /* phi */
@@ -312,21 +301,21 @@ pre code {
 
 table {
     width: 95%;
-    border: 1px solid var(--fgcolor);
+    border: 1px solid var(--fgcolor2);
     border-collapse: collapse;
     border-spacing: 0;
     margin-bottom: 1.5em;
 }
 th {
-    background-color: var(--fgcolor);
-    color: var(--bgcolor);
+    background-color: var(--fgcolor2);
+    color: var(--bgcolor1);
     font-style:italic;
 }
 th, td {
     padding: .3em;
     line-height: 1.428571429;
     vertical-align: top;
-    border: 1px solid var(--fgcolor);
+    border: 1px solid var(--fgcolor2);
 }
 
 main p {
