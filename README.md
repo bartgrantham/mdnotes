@@ -99,6 +99,7 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
 
 ### Bugs
 
+- utterly broken on Safari
 - image (other media, too?) with a relative path doesn't get translated properly.  Ie. `foo/bar.md` contains a link to `quux.png`, the link is `/quux.png` when it should be `foo/quux.png`
 - unhover header menus after click
     - this turns out to be harder than it looks
