@@ -21,15 +21,18 @@ My goal with this project was to achieve the major functionality of mdwiki I fou
 Some issues I had with mdwiki that I wanted to avoid:
 
 - super heavy development environment: I was unable to set up a development environment that could build mdwiki, so any hacking on the original codebase was impossible for me
-- easy and obvious codebase, stupid-simple build script
 - misbehaving syntax highlighting causing infinite loops locking up the browser
+- older CSS layout techniques
+
+And I wanted an easy and obvious codebase, with a stupid-simple build script.
 
 ### So what did I end up with?
 
 * [Marked.js](https://marked.js.org) for converting Markdown into HTML
 * [PrismJS](https://prismjs.com/index.html) for code highlighting
-* a slightly edited [AsciiMath](http://asciimath.org/)
+* [AsciiMath](http://asciimath.org/) for rendering equations (slightly edited)
 * ~300 lines of vanilla JS
+* ~370 lines of simple CSS
 * a ~25 line Python build script
 
 
