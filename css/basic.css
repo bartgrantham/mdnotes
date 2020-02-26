@@ -182,7 +182,6 @@ a {
 #content {
     max-width: calc(100% - 10em);
     margin: auto;
-    overflow: hidden;
     display: flex;
     flex-direction: row;
 }
