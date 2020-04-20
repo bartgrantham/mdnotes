@@ -61,6 +61,10 @@ a {
 
 /****  Header: navigation links rendered from navigation.md ****/
 
+#header * {
+    z-index: 999;
+}
+
 #header {
     display: flex;
     flex-direction: row;
@@ -199,6 +203,8 @@ toc:empty {
 toc ul {
     margin-right: 2em;
     padding: 0;
+    position: sticky;
+    top: 14px;
 }
 
 toc li {
