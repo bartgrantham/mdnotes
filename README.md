@@ -119,8 +119,7 @@ I'd like to keep things simple, though.  I think one of the problems mdwiki had 
     - I want a `:not(:has(*))` for these li's as well
 - header (and toc?) multi-level navigation
 - headers don't degrade gracefully when we run out of space (in fact, they go haywire)
-- nav scroll should follow main scroll (including scrolling itself!)
-- calculation of anchor scroll target coordinate has a magic value (1.5), should be more exact
+- toc can be taller than the screen, making elements below the fold unreachable unless you scroll all the way to the bottom
 
 ### Probably won't fix
 

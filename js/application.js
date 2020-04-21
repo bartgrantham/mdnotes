@@ -114,7 +114,7 @@ var Markdown = (spec)=>{
         alerts[word] = "green"
     }
 
-    let raw_md = "", error_msg = "";
+    let raw_md = "", error_msg = "", scroll_tick = false;
 
     let load = ()=>{
             let init = { headers: {'Cache-Control': 'max-age=0', 'Pragma': 'no-cache'} };
@@ -215,7 +215,9 @@ var Markdown = (spec)=>{
         }
 
         let mainel = document.getElementById('main');
+        window.removeEventListener('scroll', scroll_listener)
         mainel.innerHTML = mainhtml;
+        window.addEventListener('scroll', scroll_listener)
 
         // in-line script tags don't fire when assigning to innerHTML, so we clone them and re-add them
         let scripts = Array(...mainel.getElementsByTagName('script'))  // for(getElements...()) { insertNode.. } == infinite loop
@@ -260,7 +262,54 @@ var Markdown = (spec)=>{
                 el.classList.add(`alert-${alerts[first]}`)
             }
         }
+        highlight_toc()
 
+    }
+
+    let scroll_listener = (e)=>{
+        if ( !scroll_tick) {
+            window.requestAnimationFrame(highlight_toc)
+            scroll_tick = true
+        }
+    }
+
+    let highlight_toc = ()=>{
+        // the algorithm is:
+        // * only consider anchors "above the fold",
+        // * choose the closest to the "scroll position"
+        // * to cover the corner case at the bottom of the document,
+        //     for the last 2x screen height scale these values so that at
+        //     max scroll they are equal to the full height of the document
+        let toc_href_li = {}, main_a = [],
+            scroll_pos = window.scrollY,
+            dist_bottom = document.body.scrollHeight - window.scrollY - window.innerHeight,
+            half_fold = window.scrollY + (window.innerHeight/2)  // scroll position + half window viewport height
+
+        // are we within 2x screen height of the bottom?
+        if ( (window.innerHeight*2) > dist_bottom ) {
+            scroll_pos += window.innerHeight - (dist_bottom/2)
+            half_fold  += (window.innerHeight - (dist_bottom/2)) / 2
+        }
+
+        // only highlight toc hrefs
+        for(const a of document.getElementById('toc').getElementsByTagName("a")) {
+            toc_href_li[a.href] = a //.parentElement
+        }
+        // only consider main anchors that are higher than halfway down the window viewport
+        for(const a of document.getElementById('main').getElementsByTagName("a")) {
+            if ( (toc_href_li[a.href] != undefined) && (a.offsetTop < half_fold) ) {
+                main_a.push(a)
+            }
+        }
+        if ( main_a.length == 0 ) {  return  }
+
+        // what's the closest anchor to window.scrollY?
+        main_a = main_a.sort((a,b) => {
+            return Math.abs(b.offsetTop-scroll_pos) < Math.abs(a.offsetTop-scroll_pos) ? 1 : -1
+        })
+        // first element is the closest
+        toc_href_li[main_a[0]].focus()
+        scroll_tick = false
     }
 
     // scroll the main content section to the named anchor
