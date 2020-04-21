@@ -266,12 +266,8 @@ var Markdown = (spec)=>{
     // scroll the main content section to the named anchor
     let markdown_scrollmain = (anchor)=>{
         let target = document.getElementsByName(anchor)[0];
-        if ( target == undefined ) {
-            document.getElementById('main').scrollTop = 0;
-        } else {
-            let rect = target.getBoundingClientRect();
-            // 1.5 == subtract anchor's height + 50% so that it's still in the scroll area
-            document.getElementById('main').scrollTop = target.offsetTop - (rect.height*1.5);
+        if ( target != undefined ) {
+            window.scroll({top:target.offsetTop})
         }
     }
 
