@@ -33,7 +33,7 @@ bhs.HTTPServer((ip_addr, port), shs.SimpleHTTPRequestHandler).serve_forever()
 
 Put in a file and run with `go run serve.go`:
 
-```
+```go
 package main
 
 import (
